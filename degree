@@ -1,0 +1,10 @@
+
+#pragma once
+//  Jessica Bryant c867 Scripting and Programming - Applications – C867 ID#001326127
+
+#include <string>
+
+enum DegreeType { SECURITY, NETWORK, SOFTWARE };
+static const std::string degreeTypeStrings[] = { "SECURITY", "NETWORK", "SOFTWARE" };
+
+
