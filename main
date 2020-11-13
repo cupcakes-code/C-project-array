@@ -1,0 +1,121 @@
+// C867classroster.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+//  Jessica Bryant c867 Scripting and Programming - Applications – C867 ID#001326127 
+
+#include <iostream>
+#include "Roster.h"
+#include "Students.h"
+#include "degree.h"
+
+
+void parse(string studentdata, string& sID, string& fname, string& lname, string& email, int& age, int& days1, int& days2, int& days3, DegreeType& dt)
+{
+    int rhs = studentdata.find(",");
+    sID = studentdata.substr(0, rhs);
+
+    int lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    fname = studentdata.substr(lhs, rhs - lhs);
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    lname = studentdata.substr(lhs, rhs - lhs);
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    email = studentdata.substr(lhs, rhs - lhs);
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    age = stoi(studentdata.substr(lhs, rhs - lhs));
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    days1 = stoi(studentdata.substr(lhs, rhs - lhs));
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    days2 = stoi(studentdata.substr(lhs, rhs - lhs));
+
+    lhs = rhs + 1;
+    rhs = studentdata.find(",", lhs);
+    days3 = stoi(studentdata.substr(lhs, rhs - lhs));
+
+    lhs = rhs + 1;
+    string degree = studentdata.substr(lhs);
+
+    if (degree == "SECURITY") {
+        dt = DegreeType::SECURITY;
+    }
+    else if (degree == "NETWORK")
+    {
+        dt = DegreeType::NETWORK;
+    }
+    else {
+        dt = DegreeType::SOFTWARE;
+    }
+}
+
+int main()
+{
+    const std::string studentData[] =
+    {
+       "A1,John,Smith,John1989@gm ail.com,20,30,35,40,SECURITY",
+       "A2,Suzan,Erickson,Erickson_1990@gmailcom,19,50,30,40,NETWORK",
+       "A3,Jack,Napoli,The_lawyer99yahoo.com,19,20,40,33,SOFTWARE",
+       "A4,Erin,Black,Erin.black@comcast.net,22,50,58,40,SECURITY",
+       "A5,Jessica,Bryant,jbry193@wgu.edu,31,20,50,30,SOFTWARE" };
+
+    const int numStudents = 5;
+    string sID, fname, lname, email;
+    int age, days1, days2, days3, i;
+    DegreeType dt;
+
+    //Printout your student information here:
+    //1.  Print out to the screen, via your application, the course title, the programming language used, your WGU student ID, and your name.
+
+    Roster roster;
+
+    //Add each student to the roster
+    for (i = 0; i < 5; i++) {
+        //Extract the student data from the strings
+        parse(studentData[i], sID, fname, lname, email, age, days1, days2, days3, dt);
+        //Add student to roster
+        roster.add(sID, fname, lname, email, age, days1, days2, days3, dt);
+    }
+
+    cout << "All Students: \n";
+    roster.printAll();
+
+    cout << endl;
+
+    roster.printInvalidEmails();
+    cout << endl;
+
+
+    cout << "The Average Days In A Course for Each Student:" << endl;
+    for (i = 0; i < 5; i++) {
+        sID = roster.classRosterArray[i]->getStudentID();
+        cout << "  Student ID = " << sID << " has ";
+        roster.printAverageDaysInCourse(sID);
+        cout << " average days in a course." << endl;
+    }
+    cout << endl;
+
+    cout << "Students by Degree:" << endl;
+
+    for (i = 0; i < 3; i++)
+    {
+        dt = static_cast<DegreeType>(i);
+        roster.printByDegreeProgram(dt);
+        cout << endl;
+    }
+    cout << endl;
+
+    cout << "Remove A3:" << endl;
+
+    roster.remove("A3");
+
+    cout << endl;
+    return 0;
+}
